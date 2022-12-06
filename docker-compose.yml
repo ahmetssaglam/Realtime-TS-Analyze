@@ -1,0 +1,93 @@
+version: '3.7'
+
+services:
+
+  ai-module:
+    container_name: "ai-module"
+    image: "ts-analyze-image"
+    build:
+      context: ./process
+    env_file:
+      - .env
+    restart: on-failure
+    depends_on:
+      - "queue"
+      - "postgres-server"
+    privileged: true
+    volumes:
+      - ./data/all.csv:/app/data/all.csv
+
+  ts-graph-visualizer:
+    container_name: "ts-graph-visualizer"
+    image: "ts-graph-visualizer-image"
+    build:
+      context: ./visualizer
+    restart: on-failure
+    ports:
+      - "7755:7755"
+    depends_on:
+      - "ai-module"
+    privileged: true
+    volumes:
+      - ./data/all.csv:/app/data/all.csv
+
+  queue-visualizer:
+    image: obsidiandynamics/kafdrop
+    container_name: queue-visualizer
+    restart: on-failure
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "queue:29092"
+      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+    depends_on:
+      - "queue"
+
+  queue:
+    container_name: queue
+    image: obsidiandynamics/kafka
+    restart: always
+    volumes:
+      - ./kafka-data:/var/lib/kafka
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+    environment:
+      KAFKA_LISTENERS: "INTERNAL://:29092,EXTERNAL://:9092"
+      KAFKA_ADVERTISED_LISTENERS: "INTERNAL://queue:29092,EXTERNAL://127.0.0.1:9092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+      KAFKA_ZOOKEEPER_SESSION_TIMEOUT: "6000"
+      KAFKA_RESTART_ATTEMPTS: "10"
+      KAFKA_RESTART_DELAY: "5"
+      ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: "0"
+
+  postgres-server:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - ./postgres_config/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5532:5432"
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - ./postgres_config/servers.json:/pgadmin4/servers.json
+      - ./postgres_config/pgpass:/pgpass
+    ports:
+      - "5533:80"
+    depends_on:
+      - postgres-server
+    restart: unless-stopped
+

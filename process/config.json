@@ -1,0 +1,8 @@
+{
+  "count": 0,
+  "max_value": 0.0802328752641825,
+  "min_value": 0.0740069629690262,
+  "hourly_anomaly_count": 0,
+  "anomaly_threshold": 0.1,
+  "alarm_threshold": 0.5
+}

@@ -1,0 +1,8 @@
+numpy==1.22.3
+pandas==1.4.2
+scikit-learn==0.24.2
+prophet==1.1.1
+plotly==5.11.0
+ujson==5.5.0
+kafka-python==2.0.2
+psycopg2_binary==2.9.5

@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "akcay-server",
+      "Group": "Servers",
+      "Host": "postgres-server",
+      "Port": 5432,
+      "MaintenanceDB": "postgres",
+      "Username": "postgres",
+      "PassFile": "/pgpass",
+      "SSLMode": "prefer"
+    }
+  }
+}
