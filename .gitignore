@@ -1,0 +1,12 @@
+.idea/
+*__pycache__*
+raw_data/
+pyod_test.ipynb
+prophet_test.ipynb
+preprocess.ipynb
+train.ipynb
+kafka-data/
+postgres-data/
+yedek/
+postgre-test.py
+test/printcool.py
