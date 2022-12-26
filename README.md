@@ -27,9 +27,13 @@ After each hour model predicts next hour. Data comes in every 10 minutes and alg
 in every 10 minutes.
 
 Alarm and Anomaly Bounds with Actual Data:
-| ![Predictions](/pictures/prediction.png?raw=true "Predictions") |
+| ![Predictions](/pictures/realtime_data.gif?raw=true "Predictions") |
 |:--:|
 | <b>Predictions and Real Data</b>|
+
+Data stream and forecasts can be viewed in real time at **localhost:7755**.
+
+To change the port, the port mapping of the visualizer service in the docker-compose.yml file can be edited.
 
 
 #### ALARM TYPES
@@ -70,7 +74,6 @@ docker logs ai-module --follow
 | ![Logs](/pictures/docker_logs.png?raw=true "Simulation Logs") |
 |:--:|
 | ![Logs](/pictures/docker_logs2.png?raw=true "Simulation Logs") |
-|:--:|
 | <b>Simulation Logs</b>|
 
 Simulation data can be manipulated in *simulation_data/* folder.
