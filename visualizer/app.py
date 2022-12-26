@@ -1,14 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Run this app with `python app.py` and
-# visit http://127.0.0.1:8050/ in your web browser.
-
-# external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-# app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-# assume you have a "long-form" data frame
-# see https://plotly.com/python/px-arguments/ for more options
-
-
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -174,7 +163,10 @@ def update_graph(n):
 
 header = html.H2(children='Real Time Bearing Data', style={'text-align': 'center', "color": "#e0e0e0", "font-family": "Arial Black"})
 interval = dcc.Interval(id='interval-component', interval=1000, n_intervals=0)
-graph = dcc.Graph(id='bearing-graph', style={"textAlign": "center", "marginTop": "50px", "height": "800px", "marginBottom": "20px"}, figure=visualize_prediction())
+graph = dcc.Graph(id='bearing-graph',
+                  style={"textAlign": "center", "marginTop": "50px", "height": "800px", "marginBottom": "20px"},
+                  config={'scrollZoom': True, 'toImageButtonOptions': {'filename': 'bearing_graph'}},
+                  figure=visualize_prediction())
 
 app.layout = html.Div(children=[
     header,
